@@ -6,11 +6,10 @@ export default function App() {
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
-      {result_bai2()}
+      {result_bai3()}
     </View>
   );
 }
-
 // learn how to link external link of js file
 // function
 const class1 = [
@@ -67,28 +66,23 @@ const result_bai1 = () => {
   console.log(validStudent);
   let copyValidStudent = [...validStudent];
   const avgPointStudent = copyValidStudent.sort((a,b) => -a.avgPoint + b.avgPoint);
-  console.log(`Danh sách học sinh có điểm cao nhất từ trên xuống:`)
-
+  
+  console.log(`Danh sách học sinh có điểm cao nhất từ trên xuống:`);
   // kiểm tra lại cách gọi object và in object đó ra console
-  for (let i=0;i<avgPointStudent.length;i++){
-    console.log(`Học sinh thứ ${i+1}`);
-    console.log(avgPointStudent[i]);  
-  }
-  // top TraningPoint
-  for(let i = 0; i< validStudent.length;i++){
-    for (let j = i+1; j< validStudent.length;j++){
-      if (validStudent[i].avgTraningPoint < validStudent[j].avgTraningPoint){
-        [validStudent[i],validStudent[j]] = [validStudent[j],validStudent[i]];
-      }
-    }
-  }
+  printvalue(avgPointStudent);
+
+  // top TraningPoint  
   console.log("Danh sách học sinh theo điểm rèn luyện \n");
   const avgTraningPointStudent = copyValidStudent.sort((a,b) => -a.avgTraningPoint + b.avgTraningPoint);
-  for (let i=0;i<avgTraningPointStudent.length;i++){
-    console.log(`Học sinh thứ ${i+1}`);
-    console.log(avgTraningPointStudent[i]);  
-  }
+  printvalue(avgTraningPointStudent);
   console.log(`Ong vàng là: `,avgTraningPointStudent[0]);
+}
+
+const printvalue = (arrValue) =>{
+  for (let i=0;i<arrValue.length;i++){
+    console.log(`Học sinh thứ ${i+1}`);
+    console.log(arrValue[i]);  
+  }
 }
 
 // Dữ liệu đầu vào được cung cấp
@@ -99,25 +93,55 @@ const oldData = [
   {code: null, name: ''},
 ];
 
-// Xử lý dữ liệu rỗng đã
-const validData = oldData.filter((a)=> a.code !== null && a.name !== null);
 const result_bai2 = () =>{
-  console.log(validData);
-  const parseArrayToObject = ({array = [], keyID = ''}) => 
-    Object.fromEntries(
-      array?.map(item => [keyID ? item?.[keyID] : item, item]) || [],
-    );
+  // Xử lý dữ liệu rỗng
+  const validData = oldData.filter((a)=> a.code !== null && a.name !== null);
+  // console.log(validData);
+  // i just try to fix => i have to update this again
+  const exam =  validData.map(({code,name})=>({[code]: {code,name}}));
+  const newData = {...exam[0],...exam[1]};
+  // Dữ liệu đã được xử lý bằng các phương thức của mảng
+  console.log(newData);
+  
+  // Lấy thông tin mỹ phẩm có mã "ab" newData['ab]
+  console.log(newData['ab']);
 }
-// Dữ liệu đã được xử lý bằng các phương thức của mảng
-const newData = {
-  ab: {code: 'ab',name: 'Son môi'},
-  ac: {code: 'ac', name: 'Sữa rửa mặt'},
-};
 
+const result_bai3 = () =>{
+  // 3 promise được cung cấp
+  const firstPromise = new Promise((resolve,reject)=>{
+    console.log("ahihi bài 1")
+    setTimeout(() => {
+      resolve('foo');
+    }, 1000);
+  });
 
+  const secondPromise = new Promise((resolve, reject) => {
+    setTimeout(()=>{
+      reject('Error: Some bug');
+      // resolve('ahaha')
+    },2000);
+  });
 
-// Lấy thông tin mỹ phẩm có mã "ab" newData['ab]
-// Kết quả: {code:'ab', name: 'Son môi'}
+  const getList = async () =>
+    await fetch('https://64d8a86c5f9bf5b879ce6dd9.mockapi.io/api/v1/moviesNow');
+
+  // firstPromise
+  //   .then(result => console.log(result));
+  Promise.all([firstPromise,secondPromise,getList()])
+    .then(result=> console.log(result))
+    .catch(error => console.log(error,"bài 3"))
+    .finally(()=> console.log("đã chạy"))
+  //   Hãy viết một chương trình bất đồng bộ như nhau. Bạn được cung cấp 3 promise, 
+  // công việc của bạn là phải chờ 3 promise này thực hiện xong.
+  // Yêu cầu thứ nhất, nếu một promise thất bại, thì phải lập tức dừng không chạy các 
+  // promise khác nữa, và log ra màn hình lỗi của promise. Nếu tất cả promise hoàn 
+  // thành, log ra màn hình thông báo thành công.
+  // Yêu cầu thứ hai, chương trình sẽ luôn chạy bất kề promise nào thất bại hay thành 
+  // công. Nếu hoàn thành xong tất cả promise log ra màn hình thông báo thành công 
+  // cho người dùng
+  // console.log("bài 3");
+}
 
 
 
