@@ -74,3 +74,12 @@ try{
     console.log("JSON Error: "+err.message);
 
 }
+{/* <Image
+            style = {{
+              // tại sao width và height không thể chọn số cụ thể được?
+              width: '50', height: '50'
+            }}
+              source={{
+                uri: 'https://reactnative.dev/img/tiny_logo.png'
+              }}
+            /> */}
