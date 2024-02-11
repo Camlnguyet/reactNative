@@ -1,10 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import 'react-native-gesture-handler';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { faCircleQuestion, faComment, faComments, faGear, faHouseChimney, faMugSaucer, faNewspaper } from '@fortawesome/free-solid-svg-icons';
+import { DrawerContent, DrawerContentScrollView, DrawerItemList, createDrawerNavigator } from '@react-navigation/drawer';
+import {LinearGradient} from 'expo-linear-gradient';
 
 // stack navigation
 function HomeScreen({navigation}) {
@@ -54,29 +56,19 @@ function DetailsScreen({route,navigation}){
 
 const Stack = createNativeStackNavigator();
 
-function AppStackNavigation() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown: false}}>
-        <Stack.Screen name='Home' component={HomeScreen}/>
-        <Stack.Screen name='Details' component={DetailsScreen}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+// bài 1
+// function AppStackNavigation() {
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown: false}}>
+//         <Stack.Screen name='Home' component={HomeScreen}/>
+//         <Stack.Screen name='Details' component={DetailsScreen}/>
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// }
 
 // Drawer Navigation
-
-function HomeScreenD({navigation}){
-  return (
-    <View style={styles.container}>
-      <Button
-        onPress={() => navigation.navigate('Notifications')}
-        title='Go to notifications'
-        />
-    </View>
-  )
-}
 
 function Notifications({navigation}){
   return(
@@ -87,38 +79,122 @@ function Notifications({navigation}){
   )
 }
 
+// bài 3
+function CustomDrawer(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+{/* header */}
+    <View>
+    <LinearGradient
+        colors={['#CDB4DB', '#FFC8DD','#BDE0FE','#FFAFCC', '#A2D2FF']}
+        start={{x: 0.25, y: 0}}
+        end={{x: 1, y: 1}}
+        // style={{flex: 1}}
+        >
+          <View style={styles.drawercontain}>
+            <Image 
+              style={{
+                height: 120, width: 120,
+                borderRadius: 60,
+                marginTop: 12,
+                marginBottom:12,
+              }}
+              source={require('./assets/avatar.jpg')}/>
+            <Text style={styles.drawerContext}>Nguyễn Văn A</Text>
+            <Text style={styles.drawerGmail}>vana@gmail.com</Text>
+          </View> 
+      </LinearGradient>
+      </View>  
+{/* end of header */}
+      <DrawerItemList {...props} />
+    </DrawerContentScrollView>
+  )
+}
 
 const Drawer = createDrawerNavigator();
 
 function DrawerApp({navigation}) {
   return (
-    // <NavigationContainer>
-      <Drawer.Navigator initialRouteName='HomeD'>
-        <Drawer.Screen name='HomeD' component={HomeScreenD}/>
-        <Drawer.Screen name='Notifications' component={Notifications}/>
-        <Drawer.Screen name='Article' component={Notifications}/>
-        <Drawer.Screen name='Chat' component={Notifications}/>
-        <Drawer.Screen name='Setting' component={Notifications}/>
+      <Drawer.Navigator initialRouteName='Home' 
+        drawerContent={(props)=>(
+          <CustomDrawer {...props}/>
+        )}
+        screenOptions={{
+          drawerActiveBackgroundColor: "#FFEAA7",
+          drawerActiveTintColor: "#F57D1F",
+        }}>
+        <Drawer.Screen  name='Home' component={HomeScreen}
+          options={{
+            // {color} => kế thừa màu từ activetincolor vào icon
+            drawerIcon: ({color}) => (
+              <FontAwesomeIcon icon={faHouseChimney} color={color}/>
+            ),
+          }}/>
+        <Drawer.Screen name='Article' component={Notifications}
+          options={{
+            drawerIcon: ({color}) => (
+              <FontAwesomeIcon icon={faNewspaper} color={color}/>
+            )
+          }}/>
+        <Drawer.Screen name='Chat' component={Notifications}
+          options={{
+            drawerIcon: ({color}) =>(
+              <FontAwesomeIcon icon={faComments} color={color}/>
+            )
+          }}/>
+        <Drawer.Screen name='Setting' component={Notifications}
+          options={{
+            drawerIcon: ({color}) =>(
+              <FontAwesomeIcon icon={faGear} color={color}/>
+            )
+          }}/>
+        <Drawer.Screen name='Help' component={Notifications}
+          options={{
+            drawerIcon: ({color}) =>(
+              <FontAwesomeIcon icon={faCircleQuestion} color={color}/>
+            )
+          }}/>
       </Drawer.Navigator>
-    // </NavigationContainer>
   )
 }
 
 // ? lồng Drawer Navigator vào Stack Navigator các bạn đã làm ở bài trước
+// NavigationContainer là phần được dùng vào phần tổng của tổng các navigation, còn các phần lẻ nhỏ khác
+// thì chỉ được sử dụng Navigator
+// cần luyện tập thêm để biết nên lông thế nào
+// theo hướng dẫn thì drawer << stack << tab
 
 export default function App(){
   return(
-    // <NavigationContainer>
-      <Stack.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Drawer' screenOptions={{headerShown: false}}>
         <Stack.Screen name='Drawer' component={DrawerApp}/>
-        <Stack.Screen name='Home' component={HomeScreen}/>
         <Stack.Screen name='Details' component={DetailsScreen}/>
       </Stack.Navigator>
-    // </NavigationContainer>
+    </NavigationContainer>
   )
 }
 
+function LinearBack(){
+  
+}
+
 const styles = StyleSheet.create({
+  drawercontain:{
+    alignItems: 'center',
+    flex: 1,
+    height: 225,
+  },
+  drawerContext:{
+    textAlign: 'left',
+    color: '#F57D1F',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 3,
+  },
+  drawerGmail:{
+    fontSize: 15,
+  },
   container: {
     width:'80%',
     flex: 1,
@@ -135,6 +211,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginTop: 12,
     borderRadius: 5,
+    paddingLeft: 12,
   },
   context: {
     textAlign: 'center',
