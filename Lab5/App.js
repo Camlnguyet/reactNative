@@ -1,10 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { useFonts } from 'expo-font';
 
 export default function App() {
+  // const [fontsLoaded, fontError] = useFonts({
+  //   'Nunito' : require('./assets/fonts/Nunito-Black.ttf'),
+  // })
+  const [fontError] = useFonts({
+    'Nunito' : require('./assets/fonts/Nunito-VariableFont_wght.ttf'),
+    'Nunito-Italic': require('./assets/fonts/Nunito-Italic-VariableFont_wght.ttf'),
+  })
+  if (!fontError){
+    <Text>Font is loading</Text>
+  }
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text style={styles.test}>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -16,5 +27,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  test:{
+    fontFamily:'Nunito-Italic',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
