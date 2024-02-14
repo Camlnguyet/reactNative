@@ -3,8 +3,10 @@ import { useState } from 'react';
 import React from 'react';
 import { Image, 
   FlatList, FlatListComponent, SafeAreaView ,StyleSheet, 
-  Text, View, Pressable, Modal, ScrollView } from 'react-native';
-
+  Text, View, Pressable, Modal, ScrollView, RefreshControl, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { StatusBarStyle } from 'expo-status-bar';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+  
 // data flatlist
 const DATA = [
   {
@@ -145,17 +147,223 @@ const FlatListDemo = () => {
   );
 };
 
-const StatusB = () => {
-  return(
-    <ScrollView>
 
+// chưa tìm hiểu kỹ bài này nên là bỏ qua nó, làm sau nhá
+const StatusB = () => {
+  // const [barStyle, setBarStyle] = useState<StatusBarStyle>('light-content');
+  // const [refreshing, setReFreshing] = React.useState(false);
+  // const onRefresh = () =>{
+
+  // };
+  return(
+    <ScrollView
+      contentContainerStyle={styles.container}
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={true}/>
+        
+      }>
+        <StatusBar
+          // barStyle={barStyle}
+          translucent
+          backgroundColor={'transparent'}
+        />
+      <Text>Kéo xuống để đổi màu StatusBar</Text>
     </ScrollView>
   )
 }
 
-export default StatusB;
+const Login = () => {
+	// State variable to hold the password 
+	const [password, setPassword] = useState(''); 
+	// State variable to track password visibility 
+	const [showPassword, setShowPassword] = useState(false); 
+	// Function to toggle the password visibility state 
+	const toggleShowPassword = () => { 
+		setShowPassword(!showPassword); 
+	}; 
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView style={styles.containerLogin}>
+        <Text style={styles.quoteLogin}>Hi Welcome Back!
+          <Image
+            style={{
+              width: 40, height: 40,
+            }}
+            source={require('./assets/waving-hand.png')}/>
+        </Text>
+        <Text>Hello again you have been missed!</Text>
+        <Image
+          style={{
+            width: 300, height: 233,
+            alignSelf:'center',
+            marginBottom: 30,
+            marginTop: 20,
+          }}
+          source={require('./assets/cover-login.jpg')}/>
+        <View>
+          <Text style={styles.label}>Email address</Text>
+          <TextInput
+            blurOnSubmit={true}
+            style={styles.inpText}
+            placeholder='Enter your email address'
+          />
+        </View>
+        {/* <View>
+          <TextInput
+            secureTextEntry={isPasswordShown}
+            style={styles.inpText}
+            placeholder='Enter your password'
+          />
+          <Image
+            style={{
+              width: 40, height: 40,
+            }}
+            source={require('./assets/view.png')}
+            />
+        </View> */}
+        <Text style={styles.label}>Password</Text>
+        <View style={styles.containerPassword}> 
+				<TextInput 
+					// Set secureTextEntry prop to hide 
+					//password when showPassword is false 
+					secureTextEntry={!showPassword} 
+					value={password} 
+					onChangeText={setPassword} 
+					style={styles.input} 
+					placeholder="Enter Password"
+					placeholderTextColor="#aaa"
+				/> 
+				<MaterialCommunityIcons 
+					name={showPassword ? 'eye-off' : 'eye'} 
+					size={24} 
+					color="#aaa"
+					style={styles.icon} 
+					onPress={toggleShowPassword} 
+				/> 
+			</View>
+        <View style={styles.login}>
+          <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+          <View>
+            <Text style={styles.loginWith}>Or Login with</Text>
+          </View>
+          <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
+        </View>
+        <View>
+          
+        </View>
+        <View style={styles.groupBtn}>
+          <TouchableOpacity style={styles.btnMedia}>
+            <Image
+              style={{
+                width: 40, height: 40,
+              }}
+              source={require('./assets/facebook.png')}
+              />
+            <Text style={{color: 'grey'}}>Facebook</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btnMedia}>
+            <Image 
+              style={{
+                width: 40, height: 40,
+              }}
+              source={require('./assets/google.png')}/>
+            <Text style={{color: 'grey'}}>Google</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.register}>
+          <Text>Don't have an account? </Text>
+          <Pressable >
+              <Text style={styles.pressRegister}>Register</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  )
+}
+export default Login;
 
 const styles = StyleSheet.create({
+  containerLogin:{
+    margin: 20,
+  },
+  quoteLogin:{
+    lineHeight: 52,
+    marginBottom: 20,
+    fontSize: 25,
+    fontWeight: 'bold',
+    marginTop: 25,
+  },
+  label:{
+    fontSize: 16,
+    color: 'grey',
+  },
+  inpText:{
+    height: 50,
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingLeft: 15,
+    marginBottom: 15,
+    marginTop: 10,
+  },
+  containerPassword: { 
+		flexDirection: 'row', 
+		alignItems: 'center', 
+		justifyContent: 'center', 
+		borderRadius: 8, 
+		paddingHorizontal: 14, 
+    height: 50,
+    borderWidth: 0.5,
+    paddingLeft: 15,
+    marginBottom: 15,
+    marginTop: 10,
+	}, 
+	input: { 
+		flex: 1, 
+		paddingVertical: 10, 
+		paddingRight: 10, 
+	}, 
+	icon: { 
+		marginLeft: 10, 
+	},
+  login:{
+    flexDirection: 'row', 
+    alignItems: 'center',
+    marginBottom: 15,
+    marginTop: 30,
+    marginRight: 10,
+    marginLeft: 10,
+  },
+  loginWith:{
+    textAlign: 'center',
+    color: 'grey',
+    marginRight: 5,
+    marginLeft: 5,
+  },
+  groupBtn:{
+    flexDirection:'row',
+    justifyContent: 'space-evenly',
+    marginBottom: 20,
+  },
+  btnMedia:{
+    // flex: 1,
+    borderColor: '#808080',
+    borderWidth: 1.2,
+    borderRadius: 10,
+    height: 50,
+    width: 170,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  register:{
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  pressRegister:{
+    color: 'violet',
+  },
   container:{
     backgroundColor: '#DCDCDC',
     flex: 1,
