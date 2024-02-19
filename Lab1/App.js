@@ -48,26 +48,38 @@ const App = () => {
 };
 
 // Ex3 
+const players = [
+  {name: 'Messi', goals: 30},
+  undefined,
+  {name: 'Ronaldo', goals: 28},
+  {name: 'Neyma', goals: 22},
+  {goals: 2},
+  {name: 'Mbappe', goals: 25},
+  {name: 'Pele', goals: null},
+];
+
 const Footballer = () => {
-  const players = [
-    {name: 'Messi', goals: 30},
-    undefined,
-    {name: 'Ronaldo', goals: 28},
-    {name: 'Neyma', goals: 22},
-    {goals: 2},
-    {name: 'Mbappe', goals: 25},
-    {name: 'Pele', goals: null},
-  ];
-  const checkPlayers = ({name,goals}) => {
+  const checkPlayers = ({name,goals} = {}) => {
     return !!name && !!goals;
   };
   const Result = () => {
-    return
+    const validPlayers = players.filter((item) => checkPlayers(item));
+    console.log(`Danh sách cầu thủ đúng điều kiện: `);
+    console.log(validPlayers);
+
+    let max = 0;
+    let maxElement;
+    const maxResult = validPlayers.filter((element, index) => {if(element.goals> max) {max = element.goals;maxElement = validPlayers[index]}});
+    
+    console.log(`Số bàn thắng nhiều nhất là ${max}`);
+    console.log(`Người ghi bàn nhiều nhất là ${JSON.stringify(maxElement)}`);
+    // console.log(max);
+    // console.log(maxElement);
   }
 
   return (
     <View>
-      {checkPlayers(players)}
+      {Result()}
     </View>
   )
 }
